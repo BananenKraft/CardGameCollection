@@ -39,4 +39,9 @@ class Deck():
     def removeTopCard(self) -> UnoCard:
         self.decksize -= 1
         return self.cards.pop(self.decksize)
+    
+    def addcard(self, card):
+        self.cards.append(card)
+        self.switchTwoCards(random.randint(0,self.decksize), self.decksize)
+        self.decksize += 1
         
