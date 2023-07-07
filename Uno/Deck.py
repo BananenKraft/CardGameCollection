@@ -38,8 +38,16 @@ class Deck():
         self.decksize -= 1
         return self.cards.pop(self.decksize)
     
-    def addcard(self, card):
+    def addCard(self, card):
         self.cards.append(card)
         self.switchTwoCards(random.randint(0,self.decksize), self.decksize)
         self.decksize += 1
-        
+
+    def getStartingCard(self) -> NormalCard: 
+        illegalstartingValues = ["pc","d4","d2","s","r"]
+        while True:
+            topCard = self.removeTopCard()
+            if topCard.value in illegalstartingValues:
+                self.addCard(topCard)
+            else: break      
+        return topCard  
