@@ -38,5 +38,10 @@ class GUIManager():
         surfaceDD.fill(self.background_color)
         surfaceDD.blit(DDmessage, (0,0))
         surfaceDD.blit(DDimg, (0, 20))
-        self.clickableList.append([pg.Rect(surface_start[0], surface_start[1], 48,74), deck])
+        self.clickableList.append([pg.Rect(surface_start[0], surface_start[1]+20, 48,74), deck])
         return surfaceDD
+    
+    def drawError(self, errorindex: int):
+        errors = ["That card is not playable!"]
+        errormessage = self.font.render(errors[errorindex], True, (0,0,0))
+        return errormessage

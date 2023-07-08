@@ -8,12 +8,13 @@ import pygame as pg
 
 # Init pygame
 pg.init()
-window_size=(800,500)
+window_size=(1000,500)
 background_color = "grey"
 screen = pg.display.set_mode(window_size)
 clock = pg.time.Clock()
 font = pg.font.SysFont(None, 24)
 running = True
+errortimer = 0
 
 # Initialize the GUIManager which is responible for drawing the objects
 guimanager = GUIManager(window_size, background_color, font)
@@ -28,21 +29,23 @@ while running:
         if event.type == pg.MOUSEBUTTONUP:
                 pos = pg.mouse.get_pos()
                 for button in guimanager.clickableList:
-                    print(button)
                     if button[0].collidepoint(pos):
                         if type(button[1]) == DrawingPile:
-                            print(True)
                             gamemanager.cardDrawn()
                         else:
-                            gamemanager.cardPlayed()
-                    
-                
+                            if gamemanager.iscardplayable(button[1]):
+                                gamemanager.cardPlayed(button[1])
+                            else:
+                                errortimer = 300
+                                 
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill(background_color)
 
-    # const for keeping track of vertical space available
+    # constants
     curr_y = 5
+    errortimer -= 1
+
 
     # TODO: somehow get absolute position of rects
     guimanager.clickableList = []
@@ -57,10 +60,15 @@ while running:
         
     # draw Player Deck
     screen.blit(guimanager.drawPlayerDeck(gamemanager.playerCards, (10, curr_y)), (10,curr_y))
-    curr_y += 105
+    curr_y += 120
+
+    # draw Errors
+    if errortimer > 0:
+        screen.blit(guimanager.drawError(0), (10, curr_y))
+        curr_y += 20
 
     pg.display.flip()
-    clock.tick(10)  # limits FPS to 60
+    clock.tick(60)  # limits FPS to 60
 
 pg.quit()
 

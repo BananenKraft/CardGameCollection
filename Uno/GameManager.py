@@ -1,6 +1,6 @@
 from DrawingPile import DrawingPile
 from DiscardPile import DiscardPile
-from GUIManager import GUIManager
+from NormalCard import NormalCard
 import os, sys
 import random
 import pygame as pg
@@ -26,9 +26,20 @@ class GameManager():
                 break
         self.discardPile.addCard(topCard)
 
+    def iscardplayable(self, currentCard: NormalCard) -> bool:
+        compareCard = self.discardPile.cards[-1]
+        if currentCard.value == compareCard.value or currentCard.color == compareCard.color or compareCard.color=="w" or currentCard.color == "w":
+            return True
+        return False
 
     def cardDrawn(self): 
         self.playerCards.append(self.drawingPile.removeTopCard())
 
-    def cardPlayed(self):
-        pass
+    def cardPlayed(self, cardPlayed: NormalCard):
+        self.playerCards.remove(cardPlayed)
+        self.discardPile.cards.append(cardPlayed)
+        match cardPlayed.value:
+            case "0","1","2","3","4","5","6","7","8","9":
+                print(True)
+            case "w", "wd4":
+                pass
