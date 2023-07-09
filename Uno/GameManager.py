@@ -1,6 +1,7 @@
 from DrawingPile import DrawingPile
 from DiscardPile import DiscardPile
 from NormalCard import NormalCard
+from GUIManager import GUIManager
 import os, sys
 import random
 import pygame as pg
@@ -35,11 +36,16 @@ class GameManager():
     def cardDrawn(self): 
         self.playerCards.append(self.drawingPile.removeTopCard())
 
-    def cardPlayed(self, cardPlayed: NormalCard):
+    def cardPlayed(self, cardPlayed: NormalCard,) -> bool:
         self.playerCards.remove(cardPlayed)
         self.discardPile.cards.append(cardPlayed)
+        print(cardPlayed.value)
         match cardPlayed.value:
-            case "0","1","2","3","4","5","6","7","8","9":
-                print(True)
-            case "w", "wd4":
+            # Normal Cards, nothin happends
+            case "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9":
                 pass
+            # TODO: Make a color picking GUI appear
+            case "pc" | "d4":
+                GUIManager.drawPickColor()
+            
+
