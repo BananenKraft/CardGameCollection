@@ -17,17 +17,6 @@ class GUIManager():
         surfaceTC.blit(TCimg, (0, 20))
         return surfaceTC
     
-    def drawPlayerDeck(playerCards: list[NormalCard], surface_start: tuple) -> pg.Surface:
-        PCimgs = [pg.image.load(playerCards[i].path) for i in range(0, len(playerCards))]
-        PCmessage = GUIManager.font.render("Your Cards:", True, (0,0,0))
-        surfacePC = pg.Surface((len(playerCards)*50, 105))
-        surfacePC.fill(GUIManager.background_color)
-        surfacePC.blit(PCmessage, (0,0))
-        for i in range(0, len(playerCards)):
-            surfacePC.blit(PCimgs[i], (50*i, 25))
-            GUIManager.clickableList.append([pg.Rect((50*i+5)+surface_start[0], 25+surface_start[1], 48, 74), playerCards[i]])
-        return surfacePC
-    
     def drawDrawingDeck(surface_start: tuple, deck: DrawingPile) -> pg.Surface:
         DDimg = pg.image.load(r"C:\Users\mk07\CardGameCollection\Uno\Images\cardBack.png")
         DDmessage = GUIManager.font.render("Draw a new Card:", True, (0,0,0))
@@ -43,5 +32,27 @@ class GUIManager():
         errormessage = GUIManager.font.render(errors[errorindex], True, (0,0,0))
         return errormessage
     
+    def drawPlayerDeck(playerCards: list[NormalCard], surface_start: tuple) -> pg.Surface:
+        PCimgs = [pg.image.load(playerCards[i].path) for i in range(0, len(playerCards))]
+        PCmessage = GUIManager.font.render("Your Cards:", True, (0,0,0))
+        surfacePC = pg.Surface((len(playerCards)*50, 105))
+        surfacePC.fill(GUIManager.background_color)
+        surfacePC.blit(PCmessage, (0,0))
+        for i in range(0, len(playerCards)):
+            surfacePC.blit(PCimgs[i], (50*i, 25))
+            GUIManager.clickableList.append([pg.Rect((50*i+5)+surface_start[0], 25+surface_start[1], 48, 74), playerCards[i]])
+        return surfacePC
+    
     def drawPickColor(surface_start: tuple):
+        colors = ["blue", "red", "green", "yellow"]
+        PCmessage = GUIManager.font.render("Pick a color:", True, (0,0,0))
+        surfacePC = pg.Surface((200,100))
+        colorimgs = [pg.image.load(rf"C:\Users\mk07\CardGameCollection\Uno\Images\{i}.png") for i in colors]
+        surfacePC.fill(GUIManager.background_color)
+        surfacePC.blit(PCmessage, (0,0))
+        for i in range(0,4):
+            surfacePC.blit(colorimgs[i], (50*i, 25))
+            GUIManager.clickableList.append([pg.Rect(50*i+5+surface_start[0], 25+surface_start[1], 40, 30), colors[i]])
+        return surfacePC
+
         

@@ -24,21 +24,7 @@ GUIManager.font = font
 GUIManager.background_color = background_color 
 
 while running:
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-                running = False
-        if event.type == pg.MOUSEBUTTONUP:
-                pos = pg.mouse.get_pos()
-                for button in GUIManager.clickableList:
-                    if button[0].collidepoint(pos):
-                        if type(button[1]) == DrawingPile:
-                            gamemanager.cardDrawn()
-                        else:
-                            if gamemanager.iscardplayable(button[1]):
-                                gamemanager.cardPlayed(button[1])
-                            else:
-                                errortimer = 300
-                                errorindex = 0
+    
                                  
 
     # fill the screen with a color to wipe away anything from last frame
@@ -49,7 +35,7 @@ while running:
     errortimer -= 1
 
 
-    # TODO: somehow get absolute position of rects
+    #absolute position of rects
     GUIManager.clickableList = []
 
     # draw Current Top Card
@@ -71,6 +57,25 @@ while running:
 
     pg.display.flip()
     clock.tick(60)  # limits FPS to 60
+
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+                running = False
+        if event.type == pg.MOUSEBUTTONUP:
+                pos = pg.mouse.get_pos()
+                for button in GUIManager.clickableList:
+                    if button[0].collidepoint(pos):
+                        if type(button[1]) == DrawingPile:
+                            gamemanager.cardDrawn()
+                        if type(button[1]) == NormalCard:
+                            if gamemanager.iscardplayable(button[1]):
+                                toBlit = gamemanager.cardPlayed(button[1], curr_y)
+                                if toBlit:
+                                    screen.blit(toBlit, (10, curr_y))
+                                curr_y += 120
+                            else:
+                                errortimer = 300
+                                errorindex = 0
 
 pg.quit()
 
