@@ -36,16 +36,14 @@ class GameManager():
     def cardDrawn(self): 
         self.playerCards.append(self.drawingPile.removeTopCard())
 
-    def cardPlayed(self, cardPlayed: NormalCard, curr_y: tuple) -> pg.Surface:
+    def cardPlayed(self, cardPlayed: NormalCard):
         self.playerCards.remove(cardPlayed)
         self.discardPile.cards.append(cardPlayed)
         print(cardPlayed.value)
-        match cardPlayed.value:
-            # Normal Cards, nothing happends
-            case "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "r" | "s" | "d2":
-                return
-            # TODO: Make a color picking GUI appear
-            case "pc" | "d4":
-                return GUIManager.drawPickColor((10,curr_y))
+    
+    def isPickColor(self, cardPlayed: NormalCard):
+        if cardPlayed.value == "d4" or cardPlayed.value == "pc":
+            return True
+        return False
             
 

@@ -17,6 +17,7 @@ font = pg.font.SysFont(None, 24)
 running = True
 errortimer = 0
 errorindex = 0
+pickcolor = False
 
 # Initialize the GameManager which is responisble for handling game logic
 gamemanager = GameManager()
@@ -25,15 +26,13 @@ GUIManager.background_color = background_color
 
 while running:
     
-                                 
-
+                                
     # fill the screen with a color to wipe away anything from last frame
     screen.fill(background_color)
 
     # constants
     curr_y = 5
     errortimer -= 1
-
 
     #absolute position of rects
     GUIManager.clickableList = []
@@ -55,6 +54,13 @@ while running:
         screen.blit(GUIManager.drawError(errorindex), (10, curr_y))
         curr_y += 20
 
+    # draw Pickcolor
+    if pickcolor:
+        screen.blit(GUIManager.drawPickColor((10, curr_y)), (10, curr_y))
+        curr_y += 105
+        
+         
+
     pg.display.flip()
     clock.tick(60)  # limits FPS to 60
 
@@ -69,13 +75,16 @@ while running:
                             gamemanager.cardDrawn()
                         if type(button[1]) == NormalCard:
                             if gamemanager.iscardplayable(button[1]):
-                                toBlit = gamemanager.cardPlayed(button[1], curr_y)
-                                if toBlit:
-                                    screen.blit(toBlit, (10, curr_y))
+                                gamemanager.cardPlayed(button[1])
+                                if gamemanager.isPickColor(button[1]):
+                                    pickcolor = True
+                                    print("worked")
                                 curr_y += 120
                             else:
                                 errortimer = 300
                                 errorindex = 0
+                        if button[1] == "blue" | "red" | "yellow" | "green":
+                            print(True)
 
 pg.quit()
 
