@@ -21,7 +21,7 @@ pickcolor = False
 
 
 # Initialize the GameManager which is responisble for handling game logic
-gamemanager = GameManager()
+GameManager.init()
 GUIManager.font = font
 GUIManager.background_color = background_color 
 
@@ -39,15 +39,15 @@ while running:
     GUIManager.clickableList = []
 
     # draw Current Top Card
-    screen.blit(GUIManager.drawTopCard(gamemanager.discardPile.cards[-1]), (10, curr_y))
+    screen.blit(GUIManager.drawTopCard(GameManager.discardPile.cards[-1]), (10, curr_y))
 
     # draw drawing Deck
-    screen.blit(GUIManager.drawDrawingDeck((190,curr_y), gamemanager.drawingPile), (190, curr_y))
+    screen.blit(GUIManager.drawDrawingDeck((190,curr_y), GameManager.drawingPile), (190, curr_y))
 
     curr_y += 105
         
     # draw Player Deck
-    screen.blit(GUIManager.drawPlayerDeck(gamemanager.playerlist, (10, curr_y)), (10,curr_y))
+    screen.blit(GUIManager.drawPlayerDeck(GameManager.playerlist[GameManager.playerturn].playerdeck, (10, curr_y)), (10,curr_y))
     curr_y += 120
 
     # draw Errors
@@ -71,11 +71,11 @@ while running:
                 for button in GUIManager.clickableList:
                     if button[0].collidepoint(pos):
                         if type(button[1]) == DrawingPile:
-                            gamemanager.cardDrawn()
+                            GameManager.cardDrawn()
                         if type(button[1]) == NormalCard:
-                            if gamemanager.iscardplayable(button[1]):
-                                gamemanager.cardPlayed(button[1])
-                                if gamemanager.isPickColor(button[1]):
+                            if GameManager.iscardplayable(button[1]):
+                                GameManager.cardPlayed(button[1])
+                                if GameManager.isPickColor(button[1]):
                                     pickcolor = True
                                     print("worked")
                                 curr_y += 120

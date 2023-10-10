@@ -12,19 +12,21 @@ class GameManager():
     drawingPile = DrawingPile()
     discardPile = DiscardPile()
     # get starting card in the Middle
+    playeramount = 0
+    playerlist = []
+    playerturn = 0
+
 
     def init():
         GameManager.GenerateStartingCard()
         # create Player Decks
-        playeramount = int(input("Select amount of players: "))
-        playerlist = GameManager.buildplayerlist()
-        playerturn = 0
-        
+        GameManager.playeramount = int(input("Select amount of players: "))
+        GameManager.playerlist = GameManager.buildplayerlist()  
     
     def buildplayerlist() -> list:
         players = []
         for i in range(0, GameManager.playeramount):
-            players.append([GameManager.drawingPile.removeTopCard() for i in range(0,7)])
+            players.append(Player([GameManager.drawingPile.removeTopCard() for i in range(0,7)]))
         return players
 
     def GenerateStartingCard():
