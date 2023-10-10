@@ -19,6 +19,7 @@ errortimer = 0
 errorindex = 0
 pickcolor = False
 
+
 # Initialize the GameManager which is responisble for handling game logic
 gamemanager = GameManager()
 GUIManager.font = font
@@ -46,7 +47,7 @@ while running:
     curr_y += 105
         
     # draw Player Deck
-    screen.blit(GUIManager.drawPlayerDeck(gamemanager.playerCards, (10, curr_y)), (10,curr_y))
+    screen.blit(GUIManager.drawPlayerDeck(gamemanager.playerlist, (10, curr_y)), (10,curr_y))
     curr_y += 120
 
     # draw Errors
@@ -57,9 +58,7 @@ while running:
     # draw Pickcolor
     if pickcolor:
         screen.blit(GUIManager.drawPickColor((10, curr_y)), (10, curr_y))
-        curr_y += 105
-        
-         
+        curr_y += 105  
 
     pg.display.flip()
     clock.tick(60)  # limits FPS to 60
@@ -83,8 +82,12 @@ while running:
                             else:
                                 errortimer = 300
                                 errorindex = 0
-                        if button[1] == "blue" | "red" | "yellow" | "green":
-                            print(True)
+                        if type(button[1]) == str:
+                            match button[1]:
+                                case "blue" | "yellow" | "red" | "green":
+                                    pass
+                             
+                        
 
 pg.quit()
 
