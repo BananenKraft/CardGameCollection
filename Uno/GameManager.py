@@ -8,55 +8,56 @@ import pygame as pg
 
 
 class GameManager():
-    def __init__(self) -> None:
-        # Build the Deck of Cards
-        self.drawingPile = DrawingPile()
-        self.discardPile = DiscardPile()
-        # get starting card in the Middle
-        self.GenerateStartingCard()
+    # Build the Deck of Cards
+    drawingPile = DrawingPile()
+    discardPile = DiscardPile()
+    # get starting card in the Middle
+
+    def init():
+        GameManager.GenerateStartingCard()
         # create Player Decks
-        self.playeramount = int(input("Select amount of players: "))
-        self.playerlist = self.buildplayerlist()
-        self.playerturn = 0
+        playeramount = int(input("Select amount of players: "))
+        playerlist = GameManager.buildplayerlist()
+        playerturn = 0
         
     
-    def buildplayerlist(self) -> list:
+    def buildplayerlist() -> list:
         players = []
-        for i in range(0, self.playeramount):
-            players.append([self.drawingPile.removeTopCard() for i in range(0,7)])
+        for i in range(0, GameManager.playeramount):
+            players.append([GameManager.drawingPile.removeTopCard() for i in range(0,7)])
         return players
 
-    def GenerateStartingCard(self):
+    def GenerateStartingCard():
         illegalstartingValues = ["pc","d4","d2","s","r"]
         while True:
-            topCard = self.drawingPile.removeTopCard()
+            topCard = GameManager.drawingPile.removeTopCard()
             if topCard.value in illegalstartingValues:
-                self.drawingPile.addCard(topCard)
+                GameManager.drawingPile.addCard(topCard)
             else: 
                 break
-        self.discardPile.addCard(topCard)
+        GameManager.discardPile.addCard(topCard)
 
-    def iscardplayable(self, currentCard: NormalCard) -> bool:
-        compareCard = self.discardPile.cards[-1]
+    def iscardplayable(currentCard: NormalCard) -> bool:
+        compareCard = GameManager.discardPile.cards[-1]
         if currentCard.value == compareCard.value or currentCard.color == compareCard.color or compareCard.color=="w" or currentCard.color == "w":
             return True
         return False
 
-    def cardDrawn(self): 
-        self.playerlist[self.playerturn].playerdeck.append(self.drawingPile.removeTopCard())
-        if self.drawingPile.decksize == 0:
-            self.drawingPile = DrawingPile()
+    def cardDrawn(): 
+        GameManager.playerlist[GameManager.playerturn].playerdeck.append(GameManager.drawingPile.removeTopCard())
+        if GameManager.drawingPile.decksize == 0:
+            GameManager.drawingPile = DrawingPile()
 
-    def cardPlayed(self, cardPlayed: NormalCard):
-        self.playerlist[self.playerturn].playerdeck.remove(cardPlayed)
-        self.discardPile.cards.append(cardPlayed)
+    def cardPlayed(cardPlayed: NormalCard):
+        GameManager.playerlist[GameManager.playerturn].playerdeck.remove(cardPlayed)
+        GameManager.discardPile.cards.append(cardPlayed)
         print(cardPlayed.value)
-        if self.playerturn < self.playeramount-1:
-            self.playerturn += 1
+        if GameManager.playerturn < GameManager.playeramount-1:
+            GameManager.playerturn += 1
         else:
-            self.playerturn = 0
+            GameManager.playerturn = 0
     
-    def isPickColor(self, cardPlayed: NormalCard):
+    def isPickColor(cardPlayed: NormalCard):
         if cardPlayed.value == "d4" or cardPlayed.value == "pc":
             return True
         return False
