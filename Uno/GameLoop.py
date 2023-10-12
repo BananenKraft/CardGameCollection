@@ -16,9 +16,7 @@ clock = pg.time.Clock()
 font = pg.font.SysFont(None, 24)
 running = True
 errortimer = 0
-errorindex = 0
-pickcolor = False
-
+errormessage = ""
 
 # Initialize the GameManager which is responisble for handling game logic
 GameManager.init()
@@ -26,8 +24,7 @@ GUIManager.font = font
 GUIManager.background_color = background_color 
 
 while running:
-    
-                                
+                            
     # fill the screen with a color to wipe away anything from last frame
     screen.fill(background_color)
 
@@ -52,13 +49,17 @@ while running:
 
     # draw Errors
     if errortimer > 0:
-        screen.blit(GUIManager.drawError(errorindex), (10, curr_y))
-        curr_y += 20
+        screen.blit(GUIManager.drawError(errormessage), (10, curr_y))
+        curr_y += 40
 
     # draw Pickcolor
-    if pickcolor:
+    if GameManager.pickcolor:
         screen.blit(GUIManager.drawPickColor((10, curr_y)), (10, curr_y))
-        curr_y += 105  
+        curr_y += 75  
+
+    # draw EndTurn Button
+    screen.blit(GUIManager.drawEndTurnButton((10,curr_y)), (10,curr_y))
+    curr_y += 55
 
     pg.display.flip()
     clock.tick(60)  # limits FPS to 60
@@ -69,26 +70,19 @@ while running:
         if event.type == pg.MOUSEBUTTONUP:
                 pos = pg.mouse.get_pos()
                 for button in GUIManager.clickableList:
-                    if button[0].collidepoint(pos):
-                        if type(button[1]) == DrawingPile:
+                    if button.rect.collidepoint(pos):
+                        if button.identifier == "DrawingDeck":
                             GameManager.cardDrawn()
-                        if type(button[1]) == NormalCard:
-                            if GameManager.iscardplayable(button[1]):
-                                GameManager.cardPlayed(button[1])
-                                if GameManager.isPickColor(button[1]):
-                                    pickcolor = True
-                                    print("worked")
-                                curr_y += 120
+                        elif button.identifier == "Card":
+                            if GameManager.iscardplayable(button.reference):
+                                GameManager.cardPlayed(button.reference)
                             else:
                                 errortimer = 300
-                                errorindex = 0
-                        if type(button[1]) == str:
-                            match button[1]:
-                                case "blue" | "yellow" | "red" | "green":
-                                    pass
-                             
-                        
-
+                                errormessage = "That card is not playable!"
+                        elif button.identifier == "Color":
+                            GameManager.colorpicked(button.reference)
+                            errortimer = 300 
+                            errormessage = f"Player {GameManager.playerturn+1} picked the color {button.reference}"   
+                        elif button.identifier == "EndTurnButton":
+                            GameManager.endTurn()                                           
 pg.quit()
-
-

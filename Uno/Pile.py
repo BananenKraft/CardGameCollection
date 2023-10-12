@@ -19,7 +19,6 @@ class Pile():
         for i in range(0,1000000):
             self.switchTwoCards(random.randint(0,self.decksize-1), random.randint(0,self.decksize-1))
 
-
     def switchTwoCards(self, cardindex1, cardindex2):
         placeholder = self.cards[cardindex1]
         self.cards[cardindex1] = self.cards[cardindex2]

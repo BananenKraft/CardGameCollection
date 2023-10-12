@@ -15,7 +15,7 @@ class GameManager():
     playeramount = 0
     playerlist = []
     playerturn = 0
-
+    pickcolor = False
 
     def init():
         GameManager.GenerateStartingCard()
@@ -54,14 +54,18 @@ class GameManager():
         GameManager.playerlist[GameManager.playerturn].playerdeck.remove(cardPlayed)
         GameManager.discardPile.cards.append(cardPlayed)
         print(cardPlayed.value)
+        if cardPlayed.value == "d4" or cardPlayed.value == "pc":
+            GameManager.pickcolor = True
+    
+    def colorpicked(color: str):
+        GameManager.discardPile.cards[-1].color = color[0]
+        GameManager.pickcolor = False
+
+    def endTurn():
         if GameManager.playerturn < GameManager.playeramount-1:
             GameManager.playerturn += 1
         else:
-            GameManager.playerturn = 0
+            GameManager.playerturn = 0   
     
-    def isPickColor(cardPlayed: NormalCard):
-        if cardPlayed.value == "d4" or cardPlayed.value == "pc":
-            return True
-        return False
             
 
