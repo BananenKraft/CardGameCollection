@@ -16,6 +16,8 @@ class GameManager():
     playerlist = []
     playerturn = 0
     pickcolor = False
+    carddrawn = False
+    cardplayed = False
 
     def init():
         GameManager.GenerateStartingCard()
@@ -26,7 +28,7 @@ class GameManager():
     def buildplayerlist() -> list:
         players = []
         for i in range(0, GameManager.playeramount):
-            players.append(Player([GameManager.drawingPile.removeTopCard() for i in range(0,7)]))
+            players.append(Player(i+1, [GameManager.drawingPile.removeTopCard() for i in range(0,7)]))
         return players
 
     def GenerateStartingCard():
@@ -46,16 +48,26 @@ class GameManager():
         return False
 
     def cardDrawn(): 
-        GameManager.playerlist[GameManager.playerturn].playerdeck.append(GameManager.drawingPile.removeTopCard())
-        if GameManager.drawingPile.decksize == 0:
-            GameManager.drawingPile = DrawingPile()
+        if GameManager.carddrawn == False:
+            GameManager.playerlist[GameManager.playerturn].playerdeck.append(GameManager.drawingPile.removeTopCard())
+            if GameManager.drawingPile.decksize == 0:
+                GameManager.drawingPile = DrawingPile()
+            GameManager.carddrawn = True
+            return True
+        return False
+        
 
     def cardPlayed(cardPlayed: NormalCard):
-        GameManager.playerlist[GameManager.playerturn].playerdeck.remove(cardPlayed)
-        GameManager.discardPile.cards.append(cardPlayed)
-        print(cardPlayed.value)
-        if cardPlayed.value == "d4" or cardPlayed.value == "pc":
-            GameManager.pickcolor = True
+        if GameManager.cardplayed == False:
+            GameManager.playerlist[GameManager.playerturn].playerdeck.remove(cardPlayed)
+            GameManager.discardPile.cards.append(cardPlayed)
+            print(cardPlayed.value)
+            if cardPlayed.value == "d4" or cardPlayed.value == "pc":
+                GameManager.pickcolor = True
+            GameManager.cardplayed = True
+            return True
+        return False
+        
     
     def colorpicked(color: str):
         GameManager.discardPile.cards[-1].color = color[0]
@@ -66,6 +78,8 @@ class GameManager():
             GameManager.playerturn += 1
         else:
             GameManager.playerturn = 0   
+        GameManager.cardplayed = False
+        GameManager.carddrawn = False
     
             
 

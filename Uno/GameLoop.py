@@ -72,17 +72,23 @@ while running:
                 for button in GUIManager.clickableList:
                     if button.rect.collidepoint(pos):
                         if button.identifier == "DrawingDeck":
-                            GameManager.cardDrawn()
+                            if not GameManager.cardDrawn():
+                                errormessage = "You already drew a card this turn!"
+                                errortimer = 300
                         elif button.identifier == "Card":
                             if GameManager.iscardplayable(button.reference):
-                                GameManager.cardPlayed(button.reference)
+                                if not GameManager.cardPlayed(button.reference):
+                                    errormessage = "You already played a card this turn"
+                                    errortimer = 300
                             else:
                                 errortimer = 300
                                 errormessage = "That card is not playable!"
                         elif button.identifier == "Color":
                             GameManager.colorpicked(button.reference)
                             errortimer = 300 
-                            errormessage = f"Player {GameManager.playerturn+1} picked the color {button.reference}"   
+                            errormessage = f"Player {GameManager.playerlist[GameManager.playerturn].number} picked the color {button.reference}"   
                         elif button.identifier == "EndTurnButton":
-                            GameManager.endTurn()                                           
+                            GameManager.endTurn()   
+                            errormessage = ""
+                            errortimer = 0                                        
 pg.quit()
