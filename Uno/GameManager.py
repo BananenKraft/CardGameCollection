@@ -55,7 +55,6 @@ class GameManager():
             GameManager.carddrawn = True
             return True
         return False
-        
 
     def cardPlayed(cardPlayed: NormalCard):
         if GameManager.cardplayed == False:
@@ -68,6 +67,11 @@ class GameManager():
             return True
         return False
         
+    # returns 0 for game still running, n for player who won    
+    def isGameOver():
+        if not GameManager.playerlist[GameManager.playerturn].playerdeck:
+            return GameManager.playerturn+1
+        return 0
     
     def colorpicked(color: str):
         GameManager.discardPile.cards[-1].color = color[0]

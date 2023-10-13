@@ -62,4 +62,14 @@ class GUIManager():
         surfaceET.blit(messageET, (10,10))
         GUIManager.clickableList.append(Clickable(pg.Rect(surface_start[0], surface_start[1], 100, 50), "EndTurnButton"))
         return surfaceET
+
+    def drawGameOver(playerWon):
+        messageGO = GUIManager.font.render("Game Over", True, (0,0,0))
+        messageGO2 = GUIManager.font.render(f"Player {playerWon} won!", True, (0,0,0))
+        surfaceGO = pg.Surface((100, 100))
+        surfaceGO.fill("grey")
+        surfaceGO.blit(messageGO, (0,0))
+        surfaceGO.blit(messageGO2, (0, 30))
+        return surfaceGO
+        
         
