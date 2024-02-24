@@ -10,6 +10,13 @@ class Pile():
         self.decksize -= 1
         return self.cards.pop(self.decksize)
     
+    def emptyDeck(self) -> list[NormalCard]:
+        rlist = []
+        while self.cards:
+            rlist.append(self.removeTopCard)
+        return rlist
+    
+    
     def addCard(self, card):
         self.cards.append(card)
         self.switchTwoCards(random.randint(0,self.decksize), self.decksize)

@@ -72,39 +72,53 @@ while running:
         pg.display.flip()
         clock.tick(60)  # limits FPS to 60
 
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                    running = False
-            if event.type == pg.MOUSEBUTTONUP:
-                    pos = pg.mouse.get_pos()
-                    for button in GUIManager.clickableList:
-                        if button.rect.collidepoint(pos):
-                            if button.identifier == "DrawingDeck":
-                                if not GameManager.cardDrawn():
-                                    errormessage = "You already drew a card this turn!"
-                                    errortimer = 300
-                            elif button.identifier == "Card":
-                                if GameManager.iscardplayable(button.reference):
-                                    if  GameManager.cardPlayed(button.reference):
-                                        if GameManager.isGameOver() > 0:
-                                            gameover = True
-                                            break
-                                        globalmessage = ""
-                                    else:
-                                        errormessage = "You already played a card this turn"
-                                        errortimer = 300
+        
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+                running = False
+        if event.type == pg.MOUSEBUTTONUP:
+                pos = pg.mouse.get_pos()
+                for button in GUIManager.clickableList:
+                    if button.rect.collidepoint(pos):
+                        if button.identifier == "DrawingDeck":
+                            if not GameManager.cardDrawn():
+                                errormessage = "You already drew a card this turn!"
+                                errortimer = 300
+                        elif button.identifier == "Card":
+                            if GameManager.iscardplayable(button.reference):
+                                if  GameManager.cardPlayed(button.reference):
+                                    if GameManager.isGameOver() > 0:
+                                        gameover = True
+                                        break
+                                    globalmessage = ""
                                 else:
-                                    errortimer = 300 
-                                    errormessage = "That card is not playable!"
-                            elif button.identifier == "Color":
-                                GameManager.colorpicked(button.reference)
-                                globalmessage = f"Player {GameManager.playerlist[GameManager.playerturn].number} picked the color {button.reference}"   
-                            elif button.identifier == "EndTurnButton":
-                                GameManager.endTurn()   
+                                    errormessage = "You already played a card this turn"
+                                    errortimer = 300
+                            else:
+                                errortimer = 300 
+                                errormessage = "That card is not playable!"
+                        elif button.identifier == "Color":
+                            GameManager.colorpicked(button.reference)
+                            globalmessage = f"Player {GameManager.playerlist[GameManager.playerturn].number} picked the color {button.reference}"   
+                        elif button.identifier == "EndTurnButton":
+                            errcode = GameManager.endTurn()
+                            if errcode == 1:
                                 errormessage = ""
-                                errortimer = 0 
-    else:
-        screen.fill(background_color)
-        screen.blit(GUIManager.drawGameOver(GameManager.playerturn+1), (window_size[0]/2-50, window_size[1]/2-50))
-        pg.display.flip()
+                                errortimer = 0
+                            elif errcode == 0:
+                                errormessage = "If you cant play a card, you have to draw one!"
+                                errortimer = 300 
+                            elif errcode == -1:
+                                errormessage = "You still have to select a color!"
+                                errortimer = 300
+    if gameover:
+        while True:
+            for event in pg.event.get():
+                if event.type==pg.MOUSEBUTTONUP:
+                    gameover = False
+                    GameManager.init()
+                    break
+            screen.fill(background_color)
+            screen.blit(GUIManager.drawGameOver(GameManager.playerturn+1), (window_size[0]/2-50, window_size[1]/2-50))
+            pg.display.flip()
 pg.quit()
